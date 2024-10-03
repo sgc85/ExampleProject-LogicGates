@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href="style.css">
+    <title>The Logic Gator</title>
+</head>
+<body>
+    <template id="andGateTemplate">
+        <div class="gate" draggable="true">
+          <img class = "gateImage" draggable = false src = "and.png">
+          <div>
+            <button class="input" style = "left:-10px; top:10px" onclick="toggleInput(this)"></button>
+            <button class="input" style = "left:-10px; bottom:10px" onclick="toggleInput(this)"></button>
+          </div>
+          <div>
+            <button class="output" style = "right:-10px; top:23px" onclick="calculateGate(this, 'AND')"></button>
+          </div>
+        </div>
+      </template>
+
+    <div class = "sidebar">
+        <div class = "title">
+            <h4>THE LOGIC GATOR</h4>
+        </div>
+        <div class = "buttonRack">
+            <button class = "newGateBtn" onclick="addGate('AND')">AND</button>
+            <button class = "newGateBtn">OR</button>
+            <button class = "newGateBtn">NOT</button>
+            <hr>
+            <button class = "newGateBtn">INPUT</button>
+            <button class = "newGateBtn">OUTPUT</button>
+        </div>
+    </div>
+
+    <div class = "circuit" id = "circuit">
+      <canvas class = "canvas"></canvas>
+    </div>
+    
+    <script src = "script.js" ></script>
+</body>
+</html>
