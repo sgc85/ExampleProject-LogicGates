@@ -47,6 +47,20 @@ body {
   /* position: relative; For absolute positioning of inputs/outputs */
 }
 
+.io{
+  width: 60px;
+  border: 1px dashed black;
+  height: 60px;
+  position: absolute;
+  cursor: grab;
+  text-align: center;
+  line-height: 60px;
+  font-size: 32px;
+  background-color: red;
+  font-family: 'Courier New', Courier, monospace;
+  z-index: 1;
+}
+
 .gateImage {
   width: 100%;  /* Ensure the gate image fits within the container */
   height: 100%;
@@ -61,7 +75,10 @@ body {
   border-radius: 50%; /* Makes the buttons circular */
   position: absolute; /* Position them over the image */
   cursor: pointer;
+  z-index: 2;
 }
+
+
 
 .input:hover, .output:hover{
   background-color: green;
@@ -74,5 +91,5 @@ body {
 .canvas{
   height:100%;
   width:100%;
-  background-color: chocolate;
+  background-color:aqua
 }
