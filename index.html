@@ -9,42 +9,38 @@
   <body>
     <template id="inputTemplate">
       <div class="io" draggable="true">
-        <div id = "inputValue" onclick = "switchInput(event)">0</div>
-        <div>
+        <div id = "inputValue" onclick = "switchInput(this)">0</div>
+
           <button
             class="output"
             style="right: -10px; top: 23px"
-            onclick="{
-              event.stopPropagation(); // Prevents the switchInput from triggering
-              console.log(event.target.parentElement)}"
+            onclick="connect(this)"
           ></button>
-        </div>
+
       </div>
     </template>
 
     <template id="andGateTemplate">
       <div class="gate" draggable="true">
         <img class="gateImage" draggable="false" src="and.png" />
-        <div>
+
           <button
             class="input"
             style="left: -10px; top: 10px"
-            onclick="toggleInput(this)"
+            onclick="connect(this)"
           ></button>
           <button
             class="input"
             style="left: -10px; bottom: 10px"
-            onclick="toggleInput(this)"
+            onclick="connect(this)"
           ></button>
-        </div>
-        <div>
           <button
             class="output"
             style="right: -10px; top: 23px"
-            onclick="calculateGate(this, 'AND')"
+            onclick="connect(this)"
           ></button>
         </div>
-      </div>
+
     </template>
 
     <div class="sidebar">
@@ -62,7 +58,7 @@
     </div>
 
     <div class="circuit" id="circuit">
-      <canvas class="canvas"></canvas>
+      <canvas id = "canvas" class="canvas"></canvas>
     </div>
 
     <script src="script.js"></script>

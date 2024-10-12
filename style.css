@@ -47,7 +47,7 @@ body {
   /* position: relative; For absolute positioning of inputs/outputs */
 }
 
-.io{
+.io {
   width: 60px;
   border: 1px dashed black;
   height: 60px;
@@ -62,34 +62,42 @@ body {
 }
 
 .gateImage {
-  width: 100%;  /* Ensure the gate image fits within the container */
+  width: 100%;
+  /* Ensure the gate image fits within the container */
   height: 100%;
   z-index: 0;
 }
 
-.input, .output {
+.input,
+.output {
   width: 15px;
   height: 15px;
   background-color: lightblue;
   border: 2px solid black;
-  border-radius: 50%; /* Makes the buttons circular */
-  position: absolute; /* Position them over the image */
+  border-radius: 50%;
+  /* Makes the buttons circular */
+  position: absolute;
+  /* Position them over the image */
   cursor: pointer;
   z-index: 2;
 }
 
 
 
-.input:hover, .output:hover{
+.input:hover,
+.output:hover {
   background-color: green;
 }
 
-.input:active, .output:active{
+.input:active,
+.output:active {
   background-color: red;
 }
 
-.canvas{
-  height:100%;
-  width:100%;
-  background-color:aqua
+.canvas {
+  /* position: absolute; */
+  height: 100%;
+  width: 100%;
+  background-color: aqua;
+  z-index: -1;
 }

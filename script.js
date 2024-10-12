@@ -19,10 +19,9 @@ function input() {
   //place the fragment of html code into the circuit div
   circuit.appendChild(newGate);
 
-  inputs[gateID] = { output: null };
+  connections[gateID] = { type: "input" };
 
   gateID++;
-  console.log(connections);
 }
 
 function addGate() {
@@ -40,32 +39,116 @@ function addGate() {
 
   newGate.querySelector(".gate").id = gateID;
 
+  let output = newGate.querySelector(".output")
+  output.id = gateID + "-output"
+
+  let inputs = newGate.querySelectorAll(".input")
+  console.log(inputs)
+  for (let i = 0; i < inputs.length; i++) {
+    inputs[i].id = gateID + "-input" + i
+  }
+
   //place the fragment of html code into the circuit div
   circuit.appendChild(newGate);
 
-  connections[gateID] = { input_1: null, input_2: null, output: null };
+
+
+  connections[gateID] = { inputs: [null, null], type: "and" };
 
   gateID++;
-  console.log(connections);
+
 }
 
 function dragStart(e) {
   e.target.classList.add("dragging");
 }
 
-function connect(event) {
-  if (!startGate) {
-    startGate = event.target.id;
+function connect(node) {
+
+  var selectedGateID, nodeType, nodeNum
+
+  [selectedGateID, nodeType, nodeNum] = getNodeDetails(node)
+
+  if (nodeType == "output") {
+    if (outputSide == null && inputSide != selectedGateID) {
+      outputSide = selectedGateID
+      // node.style.backgroundColor = "green"
+    }
+    else {
+      inputSide = null
+      outputSide = null
+    }
+  }
+  else {
+    if (inputSide == null && outputSide != selectedGateID) {
+      inputSide = { id: selectedGateID, inputNumber: nodeNum }
+    }
+    else {
+      inputSide = null
+      outputSide = null
+    }
+  }
+
+
+
+  if (inputSide && outputSide) {
+    makeConnection()
   }
 }
 
+function makeConnection() {
+  connections[inputSide.id].inputs[inputSide.inputNumber] = outputSide
+  console.log(connections)
+  inputSide = null
+  outputSide = null
+  drawConnections()
+}
+
+function drawConnections() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  for (gate in connections) {
+    let endGate = document.getElementById(gate)
+    let inputs = connections[gate].inputs
+    for (id in inputs) {
+      if (inputs[id] != null) {
+        let startGate = document.getElementById(inputs[id])
+        let startGateRect = startGate.getBoundingClientRect()
+        let endGateRect = endGate.getBoundingClientRect()
+        startX = startGateRect.right - canvasOffsetX 
+        startY = startGateRect.top + 24
+        endX = endGateRect.left - canvasOffsetX
+        endY = endGateRect.top + (id * 16) + 16
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(endX, endY);
+
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+
+function getNodeDetails(node) {
+  var gateID = node.parentElement.id
+  var nodeType = node.id.includes("input") ? "input" : "output"
+  var nodeNum = -1
+  if (nodeType == "input") {
+    nodeNum = node.id.substr(node.id.length - 1, 1)
+  }
+
+  return [gateID, nodeType, nodeNum]
+}
+
+
+
 function switchInput(event) {
-    event.stopPropagation()
+  event.stopPropagation()
   const io = event.target;
   if (io.id === "inputValue") {
-    var inputValue = (parseInt(io.innerHTML) + 1) % 2;
+    var inputValue = io.innerHTML == "1" ? "0" : "1"
     io.innerHTML = inputValue;
-    if (inputValue === 0) {
+    if (inputValue === "0") {
       io.style.backgroundColor = "red";
     } else {
       io.style.backgroundColor = "green";
@@ -74,13 +157,24 @@ function switchInput(event) {
 }
 
 const connections = {};
-const inputs = {};
+const canvas = document.getElementById("canvas")
 const circuit = document.getElementById("circuit");
+
+const ctx = canvas.getContext("2d");
+const circuitSize = circuit.getBoundingClientRect()
+const canvasOffsetX = circuitSize.x
+canvas.width = circuitSize.width
+canvas.height = circuitSize.height
+
 var gateID = 0;
-var startGate = null;
+var inputSide = null;
+var outputSide = null;
+
+
 // Drag and Drop Functionality
 circuit.addEventListener("dragover", function (e) {
   e.preventDefault();
+
 });
 
 circuit.addEventListener("drop", function (e) {
@@ -89,4 +183,5 @@ circuit.addEventListener("drop", function (e) {
   draggedElement.style.top = `${e.clientY - 30}px`;
   draggedElement.style.left = `${e.clientX - 60}px`;
   draggedElement.classList.remove("dragging");
-});
+  drawConnections();
+})
